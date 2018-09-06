@@ -5,7 +5,7 @@
 
     <groupId>com.ngtesting.plaform</groupId>
     <artifactId>ngtesting-web</artifactId>
-    <version>1.0</version>
+    <version>1.0.10</version>
     <packaging>jar</packaging>
 
     <name>ngtesting-web</name>
@@ -183,8 +183,8 @@
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
         <dependency>  <!-- 加上这个才能辨认到log4j2.yml文件 -->
-        <groupId>com.fasterxml.jackson.dataformat</groupId>
-        <artifactId>jackson-dataformat-yaml</artifactId>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
         </dependency>
 
     </dependencies>
@@ -231,6 +231,7 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id>copy-jar</id>
                         <phase>package</phase>
                         <goals>
                             <goal>run</goal>
@@ -249,6 +250,45 @@
                             </tasks>
                         </configuration>
                     </execution>
+
+                    <execution>
+                        <id>gen-mysql-image</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <exec executable="docker" dir="${project.basedir}/src/main/docker/mysql">
+                                    <arg value="build" />
+                                    <arg value="-t" />
+                                    <arg value="registry.cn-hangzhou.aliyuncs.com/ngtesting/ngtesting-mysql:${version}" />
+                                    <arg value="." />
+                                </exec>
+                            </tasks>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>push-docker-image</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <exec executable="docker">
+                                    <arg value="push" />
+                                    <arg value="registry.cn-hangzhou.aliyuncs.com/ngtesting/ngtesting-mysql:${version}" />
+                                </exec>
+
+                                <exec executable="docker">
+                                    <arg value="push" />
+                                    <arg value="registry.cn-hangzhou.aliyuncs.com/ngtesting/ngtesting-web:${version}" />
+                                </exec>
+                            </tasks>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
 
@@ -259,6 +299,7 @@
 
                 <executions>
                     <execution>
+                        <phase>package</phase>
                         <id>build-image</id>
                         <goals>
                             <goal>build</goal>
@@ -267,7 +308,7 @@
                 </executions>
 
                 <configuration>
-                    <imageName>registry.cn-hangzhou.aliyuncs.com/ngtesting/ngtesting-web
+                    <imageName>registry.cn-hangzhou.aliyuncs.com/ngtesting/ngtesting-web:${version}
                     </imageName>
                     <dockerDirectory>src/main/docker</dockerDirectory>
                     <resources>
