@@ -5,11 +5,14 @@ import com.ngtesting.platform.model.TstProjectAccessHistory;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProjectDao {
     List<TstProject> query(@Param("orgId") Integer orgId,
                            @Param("keywordsParam") String keywordsParam,
                            @Param("disabledParam") Boolean disabledParam);
+
+    List<Map<String, String>> queryIdAndName(@Param("orgId") Integer orgId);
 
     TstProject get(@Param("id") Integer id);
     void delete(@Param("id") Integer id, @Param("userId") Integer userId);
@@ -26,6 +29,11 @@ public interface ProjectDao {
 
     void save(TstProject vo);
     void update(TstProject vo);
+
+    void setDefault(@Param("id") Integer id,
+                       @Param("prjId") Integer prjId,
+                       @Param("prjName") String prjName);
+    void setUserDefaultPrjToNullForDelete(@Param("prjId") Integer prjId);
 
     void enable(@Param("id") Integer id);
     void enableChildren(@Param("id") Integer id);

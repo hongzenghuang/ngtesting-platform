@@ -6,12 +6,22 @@ public class IsuStatus extends BaseModel {
 	private String label;
 	private String value;
     private String descr;
-    private Integer displayOrder;
+    private Integer ordr;
+
+    private Boolean isDefault = false;
     private Boolean isFinal;
     private Boolean isBuildIn = false;
-    private Long orgId;
+    private Integer orgId;
 
-	public String getLabel() {
+    public Boolean getDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(Boolean aDefault) {
+        isDefault = aDefault;
+    }
+
+    public String getLabel() {
 		return label;
 	}
 
@@ -19,12 +29,28 @@ public class IsuStatus extends BaseModel {
 		this.label = label;
 	}
 
-	public String getValue() {
-		return value;
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public Boolean getFinal() {
+		return isFinal;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
+	public void setFinal(Boolean aFinal) {
+		isFinal = aFinal;
+	}
+
+	public Boolean getBuildIn() {
+		return isBuildIn;
+	}
+
+	public void setBuildIn(Boolean buildIn) {
+		isBuildIn = buildIn;
 	}
 
 	public String getDescr() {
@@ -33,12 +59,15 @@ public class IsuStatus extends BaseModel {
 	public void setDescr(String descr) {
 		this.descr = descr;
 	}
-	public Integer getDisplayOrder() {
-		return displayOrder;
+
+	public Integer getOrdr() {
+		return ordr;
 	}
-	public void setDisplayOrder(Integer displayOrder) {
-		this.displayOrder = displayOrder;
+
+	public void setOrdr(Integer ordr) {
+		this.ordr = ordr;
 	}
+
 	public Boolean getIsFinal() {
 		return isFinal;
 	}
@@ -51,10 +80,10 @@ public class IsuStatus extends BaseModel {
 	public void setIsBuildIn(Boolean isBuildIn) {
 		this.isBuildIn = isBuildIn;
 	}
-	public Long getOrgId() {
+	public Integer getOrgId() {
 		return orgId;
 	}
-	public void setOrgId(Long orgId) {
+	public void setOrgId(Integer orgId) {
 		this.orgId = orgId;
 	}
 

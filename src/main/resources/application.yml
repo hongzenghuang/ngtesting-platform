@@ -1,8 +1,11 @@
 spring:
     profiles:
       active: prod
+    aop:
+      auto: true # Add @EnableAspectJAutoProxy
+      proxy-target-class: false # Whether subclass-based (CGLIB) proxies are to be created (true) as opposed to standard Java interface-based proxies (false)
     resources:
-      static-locations: classpath:/META-INF/resources/,classpath:/resources/, classpath:/static/, classpath:/public/, file:${sys.work.dir}
+      static-locations: classpath:/META-INF/resources/,classpath:/resources/, classpath:/static/, classpath:/public/, file:${sys.work.dir}, file:${sys.work.my-mind-test}
     freemarker:
       template-loader-path: classpath:/mail-template/
     datasource:
@@ -63,6 +66,7 @@ sys:
   name: ngtesting
   work:
     dir: /work/ngtesting-data/
+    my-mind-test: /Users/aaron/dev/project
   url:
     login: http://{0}#/login
     resetPassword: http://{0}#/reset-password
@@ -89,4 +93,12 @@ spring:
 config:
   mysql:
     host: ngtesting-mysql
+    port: 3306
+
+---
+spring:
+  profiles: aliyun-db
+config:
+  mysql:
+    host: 47.99.102.138
     port: 3306

@@ -3,6 +3,7 @@ package com.ngtesting.platform.model;
 import java.util.Date;
 
 public class TstUser extends BaseModel {
+    private static final long serialVersionUID = 8137369995938797198L;
 
     private String email;
     private String password;
@@ -15,6 +16,11 @@ public class TstUser extends BaseModel {
     private Date lastLoginTime;
     private Integer leftSizeDesign = 300;
     private Integer leftSizeExe = 200;
+    private Integer leftSizeIssue = 300;
+
+    private String issueView = "table";
+    private String issueColumns = "";
+    private String issueFileds = "";
 
     private Integer defaultOrgId;
     private String defaultOrgName;
@@ -25,6 +31,14 @@ public class TstUser extends BaseModel {
     private Boolean selecting;
 
     private String type = "user";
+
+    public Integer getLeftSizeIssue() {
+        return leftSizeIssue;
+    }
+
+    public void setLeftSizeIssue(Integer leftSizeIssue) {
+        this.leftSizeIssue = leftSizeIssue;
+    }
 
     public String getTemp() {
         return temp;
@@ -160,5 +174,29 @@ public class TstUser extends BaseModel {
 
     public void setLeftSizeExe(Integer leftSizeExe) {
         this.leftSizeExe = leftSizeExe;
+    }
+
+    public String getIssueView() {
+        return issueView;
+    }
+
+    public void setIssueView(String issueView) {
+        this.issueView = issueView;
+    }
+
+    public String getIssueColumns() {
+        return issueColumns;
+    }
+
+    public void setIssueColumns(String issueColumns) {
+        this.issueColumns = issueColumns;
+    }
+
+    public String getIssueFileds() {
+        return issueFileds;
+    }
+
+    public void setIssueFileds(String issueFileds) {
+        this.issueFileds = issueFileds;
     }
 }

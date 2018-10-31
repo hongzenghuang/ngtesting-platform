@@ -1,13 +1,13 @@
 package com.ngtesting.platform.service;
 
-import com.ngtesting.platform.model.TstCase;
+import com.ngtesting.platform.model.IsuIssue;
 
 import java.util.List;
 
 public interface IssueService extends BaseService {
+	IsuIssue get(Integer id, Integer orgId);
 
-	List<TstCase> query(Integer projectId);
+	void genVos(List<IsuIssue> pos);
 
-	TstCase getById(Integer caseId);
-
+	void genVo(IsuIssue po);
 }

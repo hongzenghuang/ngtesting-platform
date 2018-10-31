@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ngtesting.platform.dao.IssuePageDao" >
+
+    <select id="list" resultMap="issuePageMap">
+        SELECT page.*
+
+        FROM IsuPage page
+
+        WHERE page.orgId=#{orgId}
+        AND page.deleted != TRUE AND page.disabled != TRUE
+        ORDER BY page.createTime ASC
+    </select>
+
+    <select id="listTabByPageId" parameterType="Map" resultMap="issuePageTabMap">
+        SELECT o.* FROM IsuPageTab o
+
+        WHERE o.pageId = #{id}
+        AND o.deleted != true AND o.disabled != true
+
+        ORDER BY o.ordr ASC
+    </select>
+
+    <select id="listElementByTabId" parameterType="Map" resultType="IsuPageElement">
+        SELECT o.* FROM IsuPageElement o
+
+        WHERE o.tabId = #{id}
+        AND o.deleted != true AND o.disabled != true
+
+        ORDER BY o.ordr ASC
+    </select>
+
+    <resultMap id="issuePageMap" type="IsuPage" autoMapping="true">
+        <id column="id" property="id"/>
+
+        <collection property="tabs" select="listTabByPageId"
+                    column="{id=id}">
+        </collection>
+    </resultMap>
+
+    <resultMap id="issuePageTabMap" type="IsuPage" autoMapping="true">
+        <id column="id" property="id"/>
+
+        <collection property="elements" select="listElementByTabId"
+                    column="{id=id}">
+        </collection>
+    </resultMap>
+
+</mapper>

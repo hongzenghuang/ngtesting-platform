@@ -1,10 +1,8 @@
 package com.ngtesting.platform.service.impl;
 
 import com.ngtesting.platform.dao.OrgPrivilegeDao;
-import com.ngtesting.platform.dao.OrgRolePrivilegeRelationDao;
 import com.ngtesting.platform.model.TstOrgPrivilegeDefine;
 import com.ngtesting.platform.service.OrgPrivilegeService;
-import com.ngtesting.platform.service.OrgRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,17 +14,15 @@ import java.util.Map;
 public class OrgPrivilegeServiceImpl extends BaseServiceImpl implements OrgPrivilegeService {
     @Autowired
     private OrgPrivilegeDao orgPrivilegeDao;
-	@Autowired
-	private OrgRolePrivilegeRelationDao orgRolePrivilegeRelationDao;
-
-    @Autowired
-    OrgRoleService orgRoleService;
 
     @Override
     public Map<String, Boolean> listByUser(Integer userId, Integer orgId) {
-        List<TstOrgPrivilegeDefine> ls = orgPrivilegeDao.listByUser(orgId, userId);
-
         Map<String, Boolean> map = new HashMap();
+        if (orgId == null) {
+            return map;
+        }
+
+        List<TstOrgPrivilegeDefine> ls = orgPrivilegeDao.listByUser(orgId, userId);
         for (TstOrgPrivilegeDefine priv: ls) {
             map.put(priv.getCode().toString(), true);
         }

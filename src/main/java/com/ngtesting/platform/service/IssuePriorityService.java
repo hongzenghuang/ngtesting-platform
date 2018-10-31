@@ -1,20 +1,24 @@
 package com.ngtesting.platform.service;
 
-import com.ngtesting.platform.model.TstCasePriority;
+import com.ngtesting.platform.model.IsuPriority;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public interface IssuePriorityService extends BaseService {
-	List<TstCasePriority> list(Integer orgId);
+	List<IsuPriority> list(Integer orgId);
 
-	TstCasePriority save(TstCasePriority vo, Integer orgId);
-	boolean delete(Integer id);
+    List<IsuPriority> list(Integer orgId, Integer prjId);
 
-	boolean setDefaultPers(Integer id, Integer orgId);
+    IsuPriority get(Integer id, Integer orgId);
 
-	List<TstCasePriority> listVos(Integer orgId);
+	IsuPriority save(IsuPriority vo, Integer orgId);
 
-	boolean changeOrderPers(Integer id, String act, Integer orgId);
+	Boolean delete(Integer id, Integer orgId);
 
-//    void createDefaultBasicDataPers(Integer id);
+	@Transactional
+	Boolean setDefault(Integer id, Integer orgId);
+
+	@Transactional
+	Boolean changeOrder(Integer id, String act, Integer orgId);
 }

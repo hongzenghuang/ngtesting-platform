@@ -28,6 +28,13 @@
         ORDER BY c.id
     </select>
 
+    <select id="queryIdAndName" resultType="Map">
+        SELECT p.id, p.name
+        FROM TstProject p WHERE p.orgId=#{orgId} AND p.type='project'
+        AND p.deleted != TRUE AND p.disabled != TRUE
+        ORDER BY p.id
+    </select>
+
     <select id="get" parameterType="Integer" resultType="TstProject">
         SELECT * FROM TstProject p WHERE p.id = #{id}
     </select>
@@ -130,6 +137,17 @@
         UPDATE TstProject
         SET disabled=TRUE
         WHERE parentId=#{id}
+    </update>
+
+    <update id="setDefault">
+        UPDATE TstUser
+        SET defaultPrjId=#{prjId}, defaultPrjName=#{prjName}
+        WHERE id=#{id}
+    </update>
+    <update id="setUserDefaultPrjToNullForDelete">
+        UPDATE TstUser
+        SET defaultPrjId=NULL, defaultPrjName=NULL
+        WHERE defaultPrjId=#{prjId}
     </update>
 
     <resultMap id="projectMaps" type="TstProject" autoMapping="true">

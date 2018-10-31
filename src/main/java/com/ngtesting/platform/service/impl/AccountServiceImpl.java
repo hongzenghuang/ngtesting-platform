@@ -51,10 +51,12 @@ public class AccountServiceImpl implements AccountService {
         user.setPassword(passwordEncoder.encodePassword(user.getPassword()));
 
         accountDao.register(user);
+        userDao.saveSettings(user);
+
         TstUser po = userDao.get(user.getId());
 
         if (po != null) {
-            accountDao.initUser(user.getId());
+            accountDao.initUser(user.getId(), user.getNickname() + "的组织");
 
             String verifyCode = accountVerifyCodeService.genVerifyCode(po.getId());
             String sys = propService.getSysName();

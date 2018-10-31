@@ -49,21 +49,41 @@
     </select>
 
     <select id="get" parameterType="int" resultType="TstUser">
-        SELECT * FROM TstUser WHERE id = #{id}
-    </select>
+        SELECT usr.*,
+          s.leftSizeDesign leftSizeDesign, s.leftSizeExe leftSizeExe, s.issueView issueView
+        FROM TstUser usr
+        JOIN TstUserSettings s ON s.userId = usr.id
 
+        WHERE usr.id = #{id}
+    </select>
     <select id="getByEmail" parameterType="string" resultType="TstUser">
-        SELECT * FROM TstUser WHERE email = #{email}
-        AND disabled != TRUE AND deleted != TRUE
+        SELECT usr.*,
+          s.leftSizeDesign leftSizeDesign, s.leftSizeExe leftSizeExe, s.issueView issueView,
+          s.issueColumns issueColumns
+
+        FROM TstUser usr
+        JOIN TstUserSettings s ON s.userId = usr.id
+
+        WHERE usr.email = #{email}
+        AND usr.disabled != TRUE AND usr.deleted != TRUE
+
         LIMIT 1;
     </select>
+
     <select id="getByEmailAndPassword" resultType="TstUser">
         SELECT * FROM TstUser WHERE email = #{email} AND password=#{password} LIMIT 1;
     </select>
 
     <select id="getByToken" resultType="TstUser">
-        SELECT * FROM TstUser WHERE token = #{token}
-        AND disabled != TRUE AND deleted != TRUE
+        SELECT usr.*,
+          s.leftSizeDesign leftSizeDesign, s.leftSizeExe leftSizeExe, s.issueView issueView,
+          s.issueColumns issueColumns
+
+        FROM TstUser usr
+        JOIN TstUserSettings s ON s.userId = usr.id
+
+        WHERE usr.token = #{token}
+        AND usr.disabled != TRUE AND usr.deleted != TRUE
         LIMIT 1;
     </select>
     <select id="getByPhone" resultType="TstUser">
@@ -80,11 +100,15 @@
 
     <insert id="save" parameterType="TstUser" useGeneratedKeys="true" keyProperty="id">
         insert into TstUser (email,password,nickname,phone,avatar,token,salt,
-          leftSizeDesign,leftSizeExe,defaultOrgId,defaultOrgName,defaultPrjId,defaultPrjName,
+          defaultOrgId,defaultOrgName,defaultPrjId,defaultPrjName,
           deleted,disabled,createTime)
         values (#{email},#{password},#{nickname},#{phone},#{avatar},#{token},#{temp},
-          #{leftSizeDesign},#{leftSizeExe},#{defaultOrgId},#{defaultOrgName},#{defaultPrjId},#{defaultPrjName},
+          #{defaultOrgId},#{defaultOrgName},#{defaultPrjId},#{defaultPrjName},
           #{deleted},#{disabled},#{createTime})
+    </insert>
+    <insert id="saveSettings" parameterType="TstUser">
+        insert into TstUserSettings (leftSizeDesign,leftSizeExe,userId)
+        values (#{leftSizeDesign},#{leftSizeExe},#{id})
     </insert>
 
     <update id="update" parameterType="TstUser">
@@ -99,28 +123,27 @@
         WHERE id=#{id}
     </update>
 
-    <update id="setDefaultOrg">
-        UPDATE TstUser
-        SET defaultOrgId=#{orgId}, defaultOrgName=#{orgName}
-        WHERE id=#{id}
-    </update>
-    <update id="setDefaultPrj">
-        UPDATE TstUser
-        SET defaultPrjId=#{prjId}, defaultPrjName=#{prjName}
-        WHERE id=#{id}
-    </update>
-
-    <update id="setDefaultOrgPrjToNullForDelete">
-        UPDATE TstUser
-        SET defaultOrgId=NULL, defaultOrgName=NULL,
-            defaultPrjId=NULL, defaultPrjName=NULL
-        WHERE defaultOrgId=#{orgId}
-    </update>
-
     <update id="setLeftSize" parameterType="TstUser">
-        UPDATE TstUser
-        SET leftSizeDesign=#{leftSizeDesign}, leftSizeExe=#{leftSizeExe}
-        WHERE id=#{id}
+        UPDATE TstUserSettings
+        SET leftSizeDesign=#{leftSizeDesign}, leftSizeExe=#{leftSizeExe}, leftSizeIssue=#{leftSizeIssue},
+          s.issueColumns issueColumns
+
+        WHERE userId=#{id}
+    </update>
+    <update id="setIssueView" parameterType="TstUser">
+        UPDATE TstUserSettings
+        SET issueView=#{issueView}
+        WHERE userId=#{id}
+    </update>
+    <update id="saveIssueColumns">
+        UPDATE TstUserSettings
+        SET issueColumns=#{issueColumns}
+        WHERE userId=#{userId}
+    </update>
+    <update id="saveIssueFields">
+        UPDATE TstUserSettings
+        SET issueFields=#{issueFields}
+        WHERE userId=#{userId}
     </update>
 
     <select id="search" resultType="TstUser">
@@ -143,5 +166,12 @@
         AND usr.disabled != TRUE
         ORDER BY usr.id ASC
     </select>
+
+    <delete id="removeFromOrg">
+      { call remove_user_from_org(
+                #{userId,mode=IN,jdbcType=INTEGER},
+                #{orgId,mode=IN,jdbcType=INTEGER}
+             ) }
+    </delete>
 
 </mapper>

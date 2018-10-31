@@ -3,7 +3,6 @@ package com.ngtesting.platform.service;
 import com.alibaba.fastjson.JSONObject;
 import com.ngtesting.platform.model.TstOrgGroupUserRelation;
 import com.ngtesting.platform.model.TstUser;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,18 +23,16 @@ public interface UserService {
 
     TstUser modifyProp(JSONObject json);
 
-    void setDefaultOrg(TstUser user, Integer orgId);
-
-    @Transactional
-    void setEmptyOrg(TstUser user, Integer orgId);
-
-    void setDefaultPrj(TstUser user, Integer prjId);
-
     List<TstUser> search(Integer orgId, String keywords, String exceptIds);
+    TstUser setIssueView(TstUser user, String issueView);
 
     TstUser setLeftSizePers(TstUser user, Integer left, String prop);
 
     List<TstUser> getProjectUsers(Integer orgId, Integer projectId);
 
-    void setDefaultOrgPrjToNullForDelete(Integer orgId);
+    Boolean removeFromOrg(Integer userId, Integer orgId);
+
+    void saveIssueColumns(String columnsStr, TstUser user);
+
+    void saveIssueFields(String fieldStr, TstUser user);
 }

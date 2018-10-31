@@ -24,23 +24,21 @@ public interface UserDao {
     String getSalt(@Param("id") Integer id);
 
     void save(TstUser record);
+    void saveSettings(TstUser record);
     void update(TstUser record);
 
     void modifyProp(@Param("id") Integer id,
                     @Param("prop") String prop,
                     @Param("value") String value);
 
-    void setDefaultOrg(@Param("id") Integer id,
-                       @Param("orgId") Integer orgId,
-                       @Param("orgName") String orgName);
-
-    void setDefaultPrj(@Param("id") Integer id,
-                       @Param("prjId") Integer prjId,
-                       @Param("prjName") String prjName);
-
+    void setIssueView(TstUser user);
     void setLeftSize(TstUser user);
 
     List<TstUser> getProjectUsers(@Param("prjId") Integer prjId, @Param("numb") Integer numb);
 
-    void setDefaultOrgPrjToNullForDelete(@Param("orgId") Integer orgId);
+    void removeFromOrg(@Param("userId") Integer userId,
+                       @Param("orgId") Integer orgId);
+
+    void saveIssueColumns(@Param("issueColumns") String issueColumns, @Param("userId") Integer userId);
+    void saveIssueFields(@Param("issueFields") String issueFields, @Param("userId") Integer userId);
 }

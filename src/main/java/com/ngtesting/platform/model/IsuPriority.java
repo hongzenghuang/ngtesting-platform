@@ -8,18 +8,9 @@ public class IsuPriority extends BaseModel {
 	private String value;
 
 	private String descr;
-    private String priority;
-    private Boolean isDefault;
-    private Integer displayOrder;
-    private Integer orgId;
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
+	private Boolean isDefault;
+	private Integer ordr;
+	private Integer orgId;
 
 	public String getLabel() {
 		return label;
@@ -29,24 +20,30 @@ public class IsuPriority extends BaseModel {
 		this.label = label;
 	}
 
-	public String getPriority() {
-		return priority;
+	public String getValue() {
+		return value;
 	}
-	public void setPriority(String priority) {
-		this.priority = priority;
+
+	public void setValue(String value) {
+		this.value = value;
 	}
+
 	public Boolean getIsDefault() {
-		return isDefault;
+		return this.isDefault;
 	}
+
 	public void setIsDefault(Boolean isDefault) {
 		this.isDefault = isDefault;
 	}
-	public Integer getDisplayOrder() {
-		return displayOrder;
+
+	public Integer getOrdr() {
+		return ordr;
 	}
-	public void setDisplayOrder(Integer displayOrder) {
-		this.displayOrder = displayOrder;
+
+	public void setOrdr(Integer ordr) {
+		this.ordr = ordr;
 	}
+
 	public Integer getOrgId() {
 		return orgId;
 	}
